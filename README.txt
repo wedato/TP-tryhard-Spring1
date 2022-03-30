@@ -74,7 +74,7 @@ test/java.
     que la façade que vous avez implémentée remplit bien sa mission également.
     * Pour lancer les tests deux choix :
         ** maven test
-        ** Exécuter à la main chaque classe de tests avec la petite flêche verte
+        ** Exécuter à la main chaque classe de tests avec la petite flèche verte
 
 - Vous avez une classe OutilsPourValidationEmail dont la fonction
 patternMatches vérifie la bonne forme d'une adresse email
