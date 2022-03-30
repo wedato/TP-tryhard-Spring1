@@ -6,6 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
 public class TpnoteApplication {
@@ -19,15 +20,18 @@ public class TpnoteApplication {
     @Autowired
     FacadeQuizz facadeQuizz;
 
+    @Autowired
+    BCryptPasswordEncoder passwordEncoder;
+
     @Bean
     public CommandLineRunner commandLineRunner() {
         return args -> {
 
             // Ajout d'un professeur au SI
-            facadeQuizz.creerUtilisateur(emailProf,motDePasseProf);
+            facadeQuizz.creerUtilisateur(emailProf,passwordEncoder.encode(motDePasseProf));
 
             // Ajout d'un étudiant au SI
-            facadeQuizz.creerUtilisateur(emailEtudiant,motDePasseEtudiant);
+            facadeQuizz.creerUtilisateur(emailEtudiant,passwordEncoder.encode(motDePasseEtudiant));
 
 
         };
