@@ -23,7 +23,8 @@ POST /api/quizz/question
         - 403 : si la personne authentifiée n'a pas accès à cette URI
 
 
-GET /api/quizz/{idQuestion}
+
+GET /api/quizz/question/{idQuestion}
     - requête authentifiée disponible pour toutes les personnes authentifiées
     - retourne dans le body l'objet Question correspondant à l'identifiant
     - Codes :
@@ -31,7 +32,7 @@ GET /api/quizz/{idQuestion}
         - 404 : si aucune question ne correspond à cet identifiant
 
 
-PUT /api/quizz/{idQuestion}/vote
+PUT /api/quizz/question/{idQuestion}/vote
     - requête authentifiée uniquement disponible pour les étudiants
     - contient dans le body un paramètre idReponse qui permettra
     à un étudiant de voter pour la réponse concernée
@@ -43,7 +44,7 @@ PUT /api/quizz/{idQuestion}/vote
         - 403 : si la personne authentifiée n'a pas accès à cette URI
 
 
-GET /api/quizz/{idQuestion}/vote
+GET /api/quizz/question/{idQuestion}/vote
     - requête authentifiée uniquement disponible pour les professeurs
     - contient dans le body le résultat des votes à la question idQuestion
     - Codes :
