@@ -68,10 +68,13 @@ Outils proposés :
 
 - Pour tester vos implémentations, vous avez deux classes disponibles dans
 test/java.
-    * TpnoteApplicationTests est une classe de tests fonctionnels qui vous permet
+    * TpnoteApplicationTests est une classe de tests fonctionnels existants qui vous permet
     de vérifier que votre web-service accomplit bien sa mission
-    * TestFacadeQuizz est une classe de tests fonctionnels qui vous permet de vérifier
+    * TestFacadeQuizz est une classe de tests fonctionnels existants qui vous permet de vérifier
     que la façade que vous avez implémentée remplit bien sa mission également.
+    * Pour lancer les tests deux choix :
+        ** maven test
+        ** Exécuter à la main chaque classe de tests avec la petite flêche verte
 
 - Vous avez une classe OutilsPourValidationEmail dont la fonction
 patternMatches vérifie la bonne forme d'une adresse email
