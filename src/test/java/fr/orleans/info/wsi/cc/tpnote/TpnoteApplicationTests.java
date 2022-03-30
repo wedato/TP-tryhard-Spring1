@@ -538,7 +538,7 @@ class TpnoteApplicationTests {
 
         // Création de la question par le professeur et récupération de l'identifiant de la question générée
         mvc.perform(post(URI.create("/api/quizz/question"))
-                        .with(httpBasic(TpnoteApplication.emailEtudiant,TpnoteApplication.motDePasseEtudiant))
+                        .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf))
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(question)))
                 .andExpect(status().isCreated())
@@ -551,7 +551,7 @@ class TpnoteApplicationTests {
 
         mvc.perform(get(URI.create("/api/quizz/question/"+idRecupere+"/vote"))
                         .accept(MediaType.APPLICATION_JSON_VALUE)
-                        .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf))
+                        .with(httpBasic(TpnoteApplication.emailEtudiant,TpnoteApplication.motDePasseEtudiant))
                 )
                 .andExpect(status().isForbidden());
 

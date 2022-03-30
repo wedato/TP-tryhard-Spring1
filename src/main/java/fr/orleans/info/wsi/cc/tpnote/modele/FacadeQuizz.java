@@ -95,4 +95,10 @@ public class FacadeQuizz {
     public Utilisateur getUtilisateurByEmail(String username) throws UtilisateurInexistantException {
         return null;
     }
+
+
+
+    public ResultatVote[] getResultats(String idQuestion) throws QuestionInexistanteException {
+        return new ResultatVote[0];
+    }
 }
