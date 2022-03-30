@@ -1,4 +1,5 @@
 POST /api/quizz/utilisateur
+    - ne nécessite aucune authentification
     - deux paramètres dans le body :
         - pseudo doit être un email valide
         - password doit être un mot de passe non vide
