@@ -367,4 +367,30 @@ public class TestFacadeQuizz {
 
     }
 
+
+
+    @Test
+    public void testGetResultatDunVote1() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException, QuestionInexistanteException, NumeroPropositionInexistantException, ADejaVoteException {
+        String email = "yohan.boichut@univ-orleans.fr";
+        String motDePasse = "1234";
+        int id = this.instance.creerUtilisateur(email,motDePasse);
+        String idQuestion = this.instance.creerQuestion(id,"Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
+
+        String emailEtu = "etudiant.brillant@etu.univ-orleans.fr";
+        String motDePasseEtu = "1234";
+        int idEtu = this.instance.creerUtilisateur(emailEtu,motDePasseEtu);
+        instance.voterReponse(idEtu,idQuestion,0);
+        ResultatVote[] resultats = instance.getResultats(idQuestion);
+        Assertions.assertTrue(resultats.length==3);
+    }
+
+
+
+    @Test
+    public void testGetResultatDunVote2() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException, QuestionInexistanteException, NumeroPropositionInexistantException, ADejaVoteException {
+        String idQuestion = "identifiant bidon";
+
+        Assertions.assertThrows(QuestionInexistanteException.class,()->instance.getResultats(idQuestion));
+
+    }
 }

@@ -97,6 +97,12 @@ public class FacadeQuizz {
     }
 
 
+    /**
+     * Permet de récupérer le résultat d'un vote à une question
+     * @param idQuestion
+     * @return
+     * @throws QuestionInexistanteException
+     */
 
     public ResultatVote[] getResultats(String idQuestion) throws QuestionInexistanteException {
         return new ResultatVote[0];
