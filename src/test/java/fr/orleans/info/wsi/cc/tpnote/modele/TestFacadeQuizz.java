@@ -4,6 +4,7 @@ import fr.orleans.info.wsi.cc.tpnote.modele.exceptions.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.util.Assert;
 
 public class TestFacadeQuizz {
 
@@ -354,5 +355,17 @@ public class TestFacadeQuizz {
     }
 
 
+
+    @Test
+    public void testReInit() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException {
+        String email = "yohan.boichut@univ-orleans.fr";
+        String motDePasse = "1234";
+        int id = this.instance.creerUtilisateur(email,motDePasse);
+        this.instance.creerQuestion(id,"Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
+        instance.reinitFacade();
+        Assertions.assertDoesNotThrow(()->this.instance.creerUtilisateur(email,motDePasse));
+
+
+    }
 
 }

@@ -10,7 +10,7 @@ public class FacadeQuizz {
     /**
      *
      * @param email : email valide
-     * @param password : mot de passe utilisateur non vide
+     * @param password : mot de passe utilisateur non vide et chiffré (lors de son intégration au web-service)
      * @return identifiant entier
      * @throws EmailDejaUtiliseException : email déjà utilisé
      * @throws EmailNonValideException : email n'est pas de la bonne forme
