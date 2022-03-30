@@ -19,6 +19,13 @@ POST /api/quizz/utilisateur
 
 
 
+POST /api/quizz/utilisateur/{idUtilisateur}
+    - pour tous les utilisateurs authentifiés
+    - Codes :
+        - 200 quand l'utilisateur est bien récupéré avec un objet Utilisateur dans
+          le body de la réponse
+        - 403 quand un utilisateur essaie de récupérer un profil qui n'est pas le sien
+
 POST /api/quizz/question
     - requête authentifiée uniquement disponible pour les professeurs (rôle PROFESSEUR)
     - Requiert dans le body de la requête :

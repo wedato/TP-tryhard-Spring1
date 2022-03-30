@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.orleans.info.wsi.cc.tpnote.modele.FacadeQuizz;
 import fr.orleans.info.wsi.cc.tpnote.modele.Question;
 import fr.orleans.info.wsi.cc.tpnote.modele.ResultatVote;
+import fr.orleans.info.wsi.cc.tpnote.modele.Utilisateur;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -138,6 +139,33 @@ class TpnoteApplicationTests {
                         .content("pseudo=etudiant.brillant@etu.univ-orleans.fr&password=       "))
                 .andExpect(status().isNotAcceptable());
     }
+
+
+    @Test
+    public void testGetProfil1() throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+        mvc.perform(get(URI.create("/api/quizz/utilisateur/0"))
+                .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf)))
+                .andExpect(status().isOk())
+                .andDo((x)->
+                {
+
+                  Utilisateur utilisateur = objectMapper.readValue(x.getResponse().getContentAsString(),Utilisateur.class);
+                  Assertions.assertEquals(TpnoteApplication.emailProf,utilisateur.getEmailUtilisateur());
+                });
+
+    }
+
+
+    @Test
+    public void testGetProfil2() throws Exception {
+        mvc.perform(get(URI.create("/api/quizz/utilisateur/1"))
+                        .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf)))
+                .andExpect(status().isForbidden());
+    }
+
+
+
 
 
     /**
