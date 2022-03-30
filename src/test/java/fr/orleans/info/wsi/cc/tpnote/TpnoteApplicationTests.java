@@ -149,7 +149,7 @@ class TpnoteApplicationTests {
 
     @Test
     public void testCreationQuestion1() throws Exception {
-        Question question = new Question("Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Vert");
+        Question question = new Question(0,"Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Vert");
 
         ObjectMapper objectMapper= new ObjectMapper();
 
@@ -170,7 +170,7 @@ class TpnoteApplicationTests {
 
     @Test
     public void testCreationQuestion2() throws Exception {
-        Question question = new Question("Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Vert");
+        Question question = new Question(0,"Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Vert");
 
         ObjectMapper objectMapper= new ObjectMapper();
 
@@ -190,7 +190,7 @@ class TpnoteApplicationTests {
 
     @Test
     public void testCreationQuestion3() throws Exception {
-        Question question = new Question("Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc");
+        Question question = new Question(0,"Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc");
 
         ObjectMapper objectMapper= new ObjectMapper();
 
@@ -212,7 +212,7 @@ class TpnoteApplicationTests {
 
     @Test
     public void testCreationQuestion4() throws Exception {
-        Question question = new Question("             ","Blanc","Noir","Rouge");
+        Question question = new Question(0,"             ","Blanc","Noir","Rouge");
 
         ObjectMapper objectMapper= new ObjectMapper();
 
@@ -232,7 +232,7 @@ class TpnoteApplicationTests {
 
     @Test
     public void testVoter1() throws Exception {
-        Question question = new Question("Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
+        Question question = new Question(0,"Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
         AtomicReference<String> identifiantQuestion = new AtomicReference<>("");
 
         ObjectMapper objectMapper= new ObjectMapper();
@@ -270,7 +270,7 @@ class TpnoteApplicationTests {
 
     @Test
     public void testVoter2() throws Exception {
-        Question question = new Question("Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
+        Question question = new Question(0,"Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
         AtomicReference<String> identifiantQuestion = new AtomicReference<>("");
 
         ObjectMapper objectMapper= new ObjectMapper();
@@ -308,7 +308,7 @@ class TpnoteApplicationTests {
 
     @Test
     public void testVoter3() throws Exception {
-        Question question = new Question("Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
+        Question question = new Question(0,"Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
         AtomicReference<String> identifiantQuestion = new AtomicReference<>("");
 
         ObjectMapper objectMapper= new ObjectMapper();
@@ -355,7 +355,7 @@ class TpnoteApplicationTests {
 
     @Test
     public void testVoter4() throws Exception {
-        Question question = new Question("Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
+        Question question = new Question(0,"Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
         AtomicReference<String> identifiantQuestion = new AtomicReference<>("");
 
         ObjectMapper objectMapper= new ObjectMapper();
@@ -392,7 +392,7 @@ class TpnoteApplicationTests {
 
     @Test
     public void testGetQuestion1() throws Exception {
-        Question question = new Question("Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
+        Question question = new Question(0,"Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
         AtomicReference<String> identifiantQuestion = new AtomicReference<>("");
 
         AtomicReference<Question> questionRecuperee=new AtomicReference<>(null);
@@ -431,7 +431,7 @@ class TpnoteApplicationTests {
      */
     @Test
     public void testGetQuestion2() throws Exception {
-        Question question = new Question("Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
+        Question question = new Question(0,"Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
         AtomicReference<String> identifiantQuestion = new AtomicReference<>("");
 
         AtomicReference<Question> questionRecuperee=new AtomicReference<>(null);
@@ -491,7 +491,7 @@ class TpnoteApplicationTests {
     @Test
     public void testGetResultats1() throws Exception {
 
-        Question question = new Question("Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
+        Question question = new Question(0,"Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
         AtomicReference<String> identifiantQuestion = new AtomicReference<>("");
 
         ObjectMapper objectMapper= new ObjectMapper();
@@ -528,7 +528,7 @@ class TpnoteApplicationTests {
     @Test
     public void testGetResultats2() throws Exception {
 
-        Question question = new Question("Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
+        Question question = new Question(0,"Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
         AtomicReference<String> identifiantQuestion = new AtomicReference<>("");
 
         ObjectMapper objectMapper= new ObjectMapper();

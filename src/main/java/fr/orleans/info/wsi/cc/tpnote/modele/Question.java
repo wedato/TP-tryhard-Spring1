@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 public class Question {
+    private int idCreateur;
     private String idQuestion;
     private String libelleQuestion;
     private String[] reponsesPossibles;
@@ -18,7 +19,8 @@ public class Question {
     public Question() {
     }
 
-    public Question(String libelleQuestion, String ...reponsesPossibles) {
+    public Question(int idCreateur,String libelleQuestion, String ...reponsesPossibles) {
+        this.idCreateur =idCreateur;
         this.idQuestion = UUID.randomUUID().toString();
         this.libelleQuestion = libelleQuestion;
         this.reponsesPossibles = reponsesPossibles;
@@ -28,6 +30,8 @@ public class Question {
             this.votesParQuestion[i]=new ArrayList<>();
         }
     }
+
+
 
     /**
      * Permet d'enregistrer un vote d'un utilisateur à une réponse
