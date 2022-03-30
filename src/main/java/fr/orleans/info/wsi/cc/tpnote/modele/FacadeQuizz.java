@@ -86,4 +86,13 @@ public class FacadeQuizz {
     //TODO
     }
 
+
+    /**
+     * Permet de récupérer un utilisateur par son email
+     * @param username
+     * @return
+     */
+    public Utilisateur getUtilisateurByEmail(String username) throws UtilisateurInexistantException {
+        return null;
+    }
 }

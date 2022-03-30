@@ -339,7 +339,19 @@ public class TestFacadeQuizz {
 
 
 
+    @Test
+    public void testGetUtilisateurByEmail1() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, UtilisateurInexistantException {
+        String email = "yohan.boichut@univ-orleans.fr";
+        String motDePasse = "1234";
+        this.instance.creerUtilisateur(email,motDePasse);
+        Assertions.assertNotNull(this.instance.getUtilisateurByEmail(email));
+    }
 
+    @Test
+    public void testGetUtilisateurByEmail2() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, UtilisateurInexistantException {
+        String email = "yohan.boichut@univ-orleans.fr";
+        Assertions.assertThrows(UtilisateurInexistantException.class,()->this.instance.getUtilisateurByEmail(email));
+    }
 
 
 

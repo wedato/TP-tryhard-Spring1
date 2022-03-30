@@ -5,6 +5,7 @@ public class Utilisateur {
     private int idUtilisateur;
     private String emailUtilisateur;
     private String motDePasseUtilisateur;
+
     private static int ID=0;
 
     public String getEmailUtilisateur() {
@@ -39,6 +40,22 @@ public class Utilisateur {
         this.motDePasseUtilisateur = motDePasseUtilisateur;
         this.idUtilisateur = ID;
         ID++;
+    }
+
+
+    public String[] getRoles(){
+        String s = (this.emailUtilisateur.split("@"))[1];
+        switch (s){
+            case "etu.univ-orleans.fr":{
+                return new String[]{"ETUDIANT"};
+            }
+            case "univ-orleans.fr" : {
+                return new String[]{"PROFESSEUR"};
+            }
+            default: {
+                return new String[0];
+            }
+        }
     }
 
 
