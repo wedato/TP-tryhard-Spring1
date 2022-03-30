@@ -9,7 +9,7 @@ Vous avez toutes les caractéristiques du web-service demandé ci-dessous.
 
 POST /api/quizz/utilisateur
     - ne nécessite aucune authentification
-    - deux paramètres dans le body :
+    - deux paramètres dans le body de la requête:
         - pseudo doit être un email valide
         - password doit être un mot de passe non vide
     - Codes :
@@ -43,7 +43,7 @@ GET /api/quizz/question/{idQuestion}
 
 PUT /api/quizz/question/{idQuestion}/vote
     - requête authentifiée uniquement disponible pour les étudiants (rôle ETUDIANT)
-    - contient dans le body un paramètre idReponse qui permettra
+    - contient dans le body de la requête un paramètre idReponse qui permettra
     à un étudiant de voter pour la réponse concernée
     - Codes :
         - 202 : le vote a été accepté
@@ -55,7 +55,7 @@ PUT /api/quizz/question/{idQuestion}/vote
 
 GET /api/quizz/question/{idQuestion}/vote
     - requête authentifiée uniquement disponible pour les professeurs (rôle PROFESSEUR)
-    - contient dans le body le résultat des votes à la question idQuestion
+    - contient dans le body de la réponse le résultat des votes à la question idQuestion
     - Codes :
         - 200 : le résultat a bien été récupéré
         - 404 : l'identifiant idQuestion ne correspond à aucune ressource existante
