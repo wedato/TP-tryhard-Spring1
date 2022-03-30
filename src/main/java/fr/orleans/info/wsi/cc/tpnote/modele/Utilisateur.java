@@ -52,9 +52,11 @@ public class Utilisateur {
         switch (s){
             case "etu.univ-orleans.fr":{
                 roles= new String[]{"ETUDIANT"};
+                break;
             }
             case "univ-orleans.fr" : {
                 roles= new String[]{"PROFESSEUR"};
+                break;
             }
             default: {
                 roles= new String[0];
