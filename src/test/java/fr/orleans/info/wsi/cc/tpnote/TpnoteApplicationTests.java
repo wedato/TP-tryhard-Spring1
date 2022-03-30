@@ -405,7 +405,8 @@ class TpnoteApplicationTests {
                         .content(objectMapper.writeValueAsString(question)))
                 .andExpect(status().isCreated())
                 .andDo((v) -> {
-                    identifiantQuestion.set(v.getResponse().getContentAsString());
+                    String[] r = v.getResponse().getHeader("Location").split("/");
+                    identifiantQuestion.set(r[r.length-1]);
                 });
 
 
