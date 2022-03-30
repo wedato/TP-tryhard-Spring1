@@ -141,6 +141,11 @@ class TpnoteApplicationTests {
     }
 
 
+    /**
+     * Un utilisateur accède à son profil
+     * Code attendu : 200
+     * @throws Exception
+     */
     @Test
     public void testGetProfil1() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -156,7 +161,11 @@ class TpnoteApplicationTests {
 
     }
 
-
+    /**
+     * Un utilisateur essaie d'accéder à un profil qui n'est pas le sien
+     * Code attendu : 403
+     * @throws Exception
+     */
     @Test
     public void testGetProfil2() throws Exception {
         mvc.perform(get(URI.create("/api/quizz/utilisateur/1"))
