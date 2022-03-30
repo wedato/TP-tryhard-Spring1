@@ -19,7 +19,7 @@ POST /api/quizz/utilisateur
 
 
 
-POST /api/quizz/utilisateur/{idUtilisateur}
+GET /api/quizz/utilisateur/{idUtilisateur}
     - pour tous les utilisateurs authentifiés
     - Codes :
         - 200 quand l'utilisateur est bien récupéré avec un objet Utilisateur dans
