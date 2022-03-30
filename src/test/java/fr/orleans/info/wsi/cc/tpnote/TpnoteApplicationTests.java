@@ -244,7 +244,7 @@ class TpnoteApplicationTests {
                         .content(objectMapper.writeValueAsString(question)))
                 .andExpect(status().isCreated())
                 .andDo((v) -> {
-                    identifiantQuestion.set(v.getResponse().getContentAsString());
+                    identifiantQuestion.set(v.getResponse().getHeader("Location"));
                 });
         String[] idDecompose = identifiantQuestion.get().split("/");
         String idRecupere = idDecompose[idDecompose.length-1];
@@ -282,7 +282,7 @@ class TpnoteApplicationTests {
                         .content(objectMapper.writeValueAsString(question)))
                 .andExpect(status().isCreated())
                 .andDo((v) -> {
-                    identifiantQuestion.set(v.getResponse().getContentAsString());
+                    identifiantQuestion.set(v.getResponse().getHeader("Location"));
                 });
         String[] idDecompose = identifiantQuestion.get().split("/");
         String idRecupere = idDecompose[idDecompose.length-1];
@@ -320,7 +320,7 @@ class TpnoteApplicationTests {
                         .content(objectMapper.writeValueAsString(question)))
                 .andExpect(status().isCreated())
                 .andDo((v) -> {
-                    identifiantQuestion.set(v.getResponse().getContentAsString());
+                    identifiantQuestion.set(v.getResponse().getHeader("Location"));
                 });
         String[] idDecompose = identifiantQuestion.get().split("/");
         String idRecupere = idDecompose[idDecompose.length-1];
@@ -367,7 +367,7 @@ class TpnoteApplicationTests {
                         .content(objectMapper.writeValueAsString(question)))
                 .andExpect(status().isCreated())
                 .andDo((v) -> {
-                    identifiantQuestion.set(v.getResponse().getContentAsString());
+                    identifiantQuestion.set(v.getResponse().getHeader("Location"));
                 });
         String[] idDecompose = identifiantQuestion.get().split("/");
         String idRecupere = idDecompose[idDecompose.length-1];
