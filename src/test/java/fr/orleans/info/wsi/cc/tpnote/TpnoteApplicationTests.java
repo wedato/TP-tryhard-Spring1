@@ -476,7 +476,7 @@ class TpnoteApplicationTests {
     public void testGetQuestion3() throws Exception {
 
 
-        String idQuestion = "identifiant bidon";
+        String idQuestion = "identifiant%20bidon";
         mvc.perform(get(URI.create("/api/quizz/question/"+ idQuestion))
                         .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf))
                         .accept(MediaType.APPLICATION_JSON_VALUE))
@@ -566,7 +566,7 @@ class TpnoteApplicationTests {
     @Test
     public void testGetResultats3() throws Exception {
 
-        String idRecupere = "identifiant bidon";
+        String idRecupere = "identifiant%20bidon";
         mvc.perform(get(URI.create("/api/quizz/question/"+idRecupere+"/vote"))
                         .accept(MediaType.APPLICATION_JSON_VALUE)
                         .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf))
