@@ -164,7 +164,7 @@ class TpnoteApplicationTests {
 
     /**
      * Tentative de création d'une question par un étudiant
-     * Code attendu : 403 (Unauthorized)
+     * Code attendu : 403 (Forbidden)
      * @throws Exception
      */
 
@@ -178,7 +178,7 @@ class TpnoteApplicationTests {
                         .with(httpBasic(TpnoteApplication.emailEtudiant,TpnoteApplication.motDePasseEtudiant))
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(question)))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden());
     }
 
 
@@ -379,7 +379,7 @@ class TpnoteApplicationTests {
                         .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf))
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .content("idReponse=1"))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden());
 
     }
 
@@ -549,7 +549,7 @@ class TpnoteApplicationTests {
                         .accept(MediaType.APPLICATION_JSON_VALUE)
                         .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf))
                 )
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden());
 
     }
 
