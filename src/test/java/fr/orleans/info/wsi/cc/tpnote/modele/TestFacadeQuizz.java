@@ -362,9 +362,8 @@ public class TestFacadeQuizz {
         int id = this.instance.creerUtilisateur(email,motDePasse);
         this.instance.creerQuestion(id,"Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
         instance.reinitFacade();
-        Assertions.assertDoesNotThrow(()->this.instance.creerUtilisateur(email,motDePasse));
         Assertions.assertEquals(0,Utilisateur.ID);
-
+        Assertions.assertDoesNotThrow(()->this.instance.creerUtilisateur(email,motDePasse));
 
     }
 
