@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -19,7 +18,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 import java.net.URI;
 import java.util.Objects;
-import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -41,7 +40,7 @@ class TpnoteApplicationTests {
     MockMvc mvc;
 
     @Autowired
-    CommandLineRunner commandLineRunner;
+    DataTest dataTest;
 
 
     /**
@@ -51,11 +50,6 @@ class TpnoteApplicationTests {
     @BeforeEach
     public void reinitialiserFacade(){
         facadeQuizz.reinitFacade();
-        try {
-            commandLineRunner.run();
-        } catch (Exception e) {
-
-        }
 
     }
 
@@ -71,7 +65,7 @@ class TpnoteApplicationTests {
 
         mvc.perform(post(URI.create("/api/quizz/utilisateur"))
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .content("pseudo=frederic.moal@univ-orleans.fr&password=sonMotDePasse"))
+                        .content("pseudo="+dataTest.emailProfBase()+"&password="+dataTest.motDePasseProfBase()))
                 .andExpect(status().isCreated()).andExpect(header().exists("Location"));
     }
 
@@ -87,7 +81,7 @@ class TpnoteApplicationTests {
 
         mvc.perform(post(URI.create("/api/quizz/utilisateur"))
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .content("pseudo=etudiant.brillant@etu.univ-orleans.fr&password=sonMotDePasse"))
+                        .content("pseudo="+dataTest.emailEtudiantBase()+"&password="+dataTest.motDePasseEtudiantBase()))
                 .andExpect(status().isCreated()).andExpect(header().exists("Location"));
     }
 
@@ -103,7 +97,12 @@ class TpnoteApplicationTests {
 
         mvc.perform(post(URI.create("/api/quizz/utilisateur"))
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .content("pseudo="+TpnoteApplication.emailProf+"&password=sonMotDePasse"))
+                        .content("pseudo="+dataTest.emailProfBase()+"&password="+dataTest.motDePasseProfBase()))
+                .andExpect(status().isCreated()).andExpect(header().exists("Location"));
+
+        mvc.perform(post(URI.create("/api/quizz/utilisateur"))
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .content("pseudo="+dataTest.emailProfBase()+"&password="+dataTest.motDePasseProfBase()+"1"))
                 .andExpect(status().isConflict());
     }
 
@@ -120,7 +119,7 @@ class TpnoteApplicationTests {
 
         mvc.perform(post(URI.create("/api/quizz/utilisateur"))
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .content("pseudo=etudiant.brillantetu.univ-orleans.fr&password=sonMotDePasse"))
+                        .content("pseudo="+dataTest.emailErrone()+"&password="+dataTest.motDePasseProfBase()))
                 .andExpect(status().isNotAcceptable());
     }
 
@@ -136,7 +135,7 @@ class TpnoteApplicationTests {
 
         mvc.perform(post(URI.create("/api/quizz/utilisateur"))
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .content("pseudo=etudiant.brillant@etu.univ-orleans.fr&password=       "))
+                        .content("pseudo="+dataTest.emailEtudiantBase()+"&password="+dataTest.mauvaisMotDePasse()))
                 .andExpect(status().isNotAcceptable());
     }
 
@@ -148,15 +147,27 @@ class TpnoteApplicationTests {
      */
     @Test
     public void testGetProfil1() throws Exception {
+
+        AtomicInteger identifiant = new AtomicInteger();
+        mvc.perform(post(URI.create("/api/quizz/utilisateur"))
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .content("pseudo="+dataTest.emailProfBase()+"&password="+dataTest.motDePasseProfBase()))
+                .andExpect(status().isCreated()).andExpect(header().exists("Location"))
+                .andDo((x) ->{
+                    String[] t=x.getResponse().getHeader("Location").split("/");
+                    identifiant.set(Integer.valueOf(t[t.length - 1]));
+                });
+
+
         ObjectMapper objectMapper = new ObjectMapper();
-        mvc.perform(get(URI.create("/api/quizz/utilisateur/0"))
-                .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf)))
+        mvc.perform(get(URI.create("/api/quizz/utilisateur/"+identifiant.get()))
+                .with(httpBasic(dataTest.emailProfBase(), dataTest.motDePasseProfBase())))
                 .andExpect(status().isOk())
                 .andDo((x)->
                 {
 
                   Utilisateur utilisateur = objectMapper.readValue(x.getResponse().getContentAsString(),Utilisateur.class);
-                  Assertions.assertEquals(TpnoteApplication.emailProf,utilisateur.getEmailUtilisateur());
+                  Assertions.assertEquals(dataTest.emailProfBase(),utilisateur.getEmailUtilisateur());
                 });
 
     }
@@ -168,11 +179,44 @@ class TpnoteApplicationTests {
      */
     @Test
     public void testGetProfil2() throws Exception {
-        mvc.perform(get(URI.create("/api/quizz/utilisateur/1"))
-                        .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf)))
+        creationCompteProfesseur();
+
+        AtomicInteger identifiant = new AtomicInteger();
+        mvc.perform(post(URI.create("/api/quizz/utilisateur"))
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .content("pseudo="+dataTest.emailEtudiantBase()+"&password="+dataTest.motDePasseEtudiantBase()))
+                .andExpect(status().isCreated()).andExpect(header().exists("Location"))
+                .andDo((x) ->{
+                    String[] t=x.getResponse().getHeader("Location").split("/");
+                    identifiant.set(Integer.valueOf(t[t.length - 1]));
+                });
+
+
+
+        mvc.perform(get(URI.create("/api/quizz/utilisateur/"+identifiant.get()))
+                        .with(httpBasic(dataTest.emailProfBase(), dataTest.motDePasseProfBase())))
                 .andExpect(status().isForbidden());
     }
 
+
+
+    private void creationCompteProfesseur() throws Exception {
+        mvc.perform(post(URI.create("/api/quizz/utilisateur"))
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .content("pseudo="+dataTest.emailProfBase()+"&password="+dataTest.motDePasseProfBase()))
+                .andExpect(status().isCreated()).andExpect(header().exists("Location"));
+
+    }
+
+
+
+    private void creationCompteEtudiant() throws Exception {
+        mvc.perform(post(URI.create("/api/quizz/utilisateur"))
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .content("pseudo="+dataTest.emailEtudiantBase()+"&password="+dataTest.motDePasseEtudiantBase()))
+                .andExpect(status().isCreated()).andExpect(header().exists("Location"));
+
+    }
 
 
 
@@ -186,12 +230,14 @@ class TpnoteApplicationTests {
 
     @Test
     public void testCreationQuestion1() throws Exception {
-        Question question = new Question(0,"Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Vert");
+
+        creationCompteProfesseur();
+        Question question = new Question(0, dataTest.libelleQuestion(), dataTest.bonnesReponses());
 
         ObjectMapper objectMapper= new ObjectMapper();
 
         mvc.perform(post(URI.create("/api/quizz/question"))
-                        .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf))
+                        .with(httpBasic(dataTest.emailProfBase(), dataTest.motDePasseProfBase()))
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(question)))
                 .andExpect(status().isCreated())
@@ -207,12 +253,13 @@ class TpnoteApplicationTests {
 
     @Test
     public void testCreationQuestion2() throws Exception {
-        Question question = new Question(0,"Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Vert");
+        creationCompteEtudiant();
+        Question question = new Question(0, dataTest.libelleQuestion(), dataTest.bonnesReponses());
 
         ObjectMapper objectMapper= new ObjectMapper();
 
         mvc.perform(post(URI.create("/api/quizz/question"))
-                        .with(httpBasic(TpnoteApplication.emailEtudiant,TpnoteApplication.motDePasseEtudiant))
+                        .with(httpBasic(dataTest.emailEtudiantBase(), dataTest.motDePasseEtudiantBase()))
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(question)))
                 .andExpect(status().isForbidden());
@@ -227,12 +274,15 @@ class TpnoteApplicationTests {
 
     @Test
     public void testCreationQuestion3() throws Exception {
-        Question question = new Question(0,"Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc");
+
+
+        creationCompteProfesseur();
+        Question question = new Question(0, dataTest.libelleQuestion(), dataTest.mauvaisesReponses());
 
         ObjectMapper objectMapper= new ObjectMapper();
 
         mvc.perform(post(URI.create("/api/quizz/question"))
-                        .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf))
+                        .with(httpBasic(dataTest.emailProfBase(), dataTest.motDePasseProfBase()))
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(question)))
                 .andExpect(status().isNotAcceptable());
@@ -249,12 +299,13 @@ class TpnoteApplicationTests {
 
     @Test
     public void testCreationQuestion4() throws Exception {
-        Question question = new Question(0,"             ","Blanc","Noir","Rouge");
+        creationCompteProfesseur();
+        Question question = new Question(0, dataTest.mauvaisLibelleQuestion(), dataTest.bonnesReponses());
 
         ObjectMapper objectMapper= new ObjectMapper();
 
         mvc.perform(post(URI.create("/api/quizz/question"))
-                        .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf))
+                        .with(httpBasic(dataTest.emailProfBase(), dataTest.motDePasseProfBase()))
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(question)))
                 .andExpect(status().isNotAcceptable());
@@ -269,14 +320,17 @@ class TpnoteApplicationTests {
 
     @Test
     public void testVoter1() throws Exception {
-        Question question = new Question(0,"Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
+
+        creationCompteProfesseur();
+        creationCompteEtudiant();
+        Question question = new Question(0, dataTest.libelleQuestion(), dataTest.bonnesReponses());
         AtomicReference<String> identifiantQuestion = new AtomicReference<>("");
 
         ObjectMapper objectMapper= new ObjectMapper();
 
         // Création de la question par le professeur et récupération de l'identifiant de la question générée
         mvc.perform(post(URI.create("/api/quizz/question"))
-                        .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf))
+                        .with(httpBasic(dataTest.emailProfBase(), dataTest.motDePasseProfBase()))
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(question)))
                 .andExpect(status().isCreated())
@@ -290,7 +344,7 @@ class TpnoteApplicationTests {
 
         // Vote de l'étudiant
         mvc.perform(put(URI.create("/api/quizz/question/"+idRecupere+"/vote"))
-                        .with(httpBasic(TpnoteApplication.emailEtudiant,TpnoteApplication.motDePasseEtudiant))
+                        .with(httpBasic(dataTest.emailEtudiantBase(), dataTest.motDePasseEtudiantBase()))
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .content("idReponse=1"))
                 .andExpect(status().isAccepted());
@@ -307,14 +361,18 @@ class TpnoteApplicationTests {
 
     @Test
     public void testVoter2() throws Exception {
-        Question question = new Question(0,"Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
+
+        creationCompteProfesseur();
+        creationCompteEtudiant();
+
+        Question question = new Question(0, dataTest.libelleQuestion(), dataTest.bonnesReponses());
         AtomicReference<String> identifiantQuestion = new AtomicReference<>("");
 
         ObjectMapper objectMapper= new ObjectMapper();
 
         // Création de la question par le professeur et récupération de l'identifiant de la question générée
         mvc.perform(post(URI.create("/api/quizz/question"))
-                        .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf))
+                        .with(httpBasic(dataTest.emailProfBase(), dataTest.motDePasseProfBase()))
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(question)))
                 .andExpect(status().isCreated())
@@ -328,7 +386,7 @@ class TpnoteApplicationTests {
 
         // Vote de l'étudiant
         mvc.perform(put(URI.create("/api/quizz/question/"+idRecupere+"/vote"))
-                        .with(httpBasic(TpnoteApplication.emailEtudiant,TpnoteApplication.motDePasseEtudiant))
+                        .with(httpBasic(dataTest.emailEtudiantBase(), dataTest.motDePasseEtudiantBase()))
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .content("idReponse=12"))
                 .andExpect(status().isNotAcceptable());
@@ -345,14 +403,18 @@ class TpnoteApplicationTests {
 
     @Test
     public void testVoter3() throws Exception {
-        Question question = new Question(0,"Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
+        creationCompteProfesseur();
+        creationCompteEtudiant();
+
+
+        Question question = new Question(0, dataTest.libelleQuestion(), dataTest.bonnesReponses());
         AtomicReference<String> identifiantQuestion = new AtomicReference<>("");
 
         ObjectMapper objectMapper= new ObjectMapper();
 
         // Création de la question par le professeur et récupération de l'identifiant de la question générée
         mvc.perform(post(URI.create("/api/quizz/question"))
-                        .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf))
+                        .with(httpBasic(dataTest.emailProfBase(), dataTest.motDePasseProfBase()))
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(question)))
                 .andExpect(status().isCreated())
@@ -366,7 +428,7 @@ class TpnoteApplicationTests {
 
         // Vote de l'étudiant
         mvc.perform(put(URI.create("/api/quizz/question/"+idRecupere+"/vote"))
-                        .with(httpBasic(TpnoteApplication.emailEtudiant,TpnoteApplication.motDePasseEtudiant))
+                        .with(httpBasic(dataTest.emailEtudiantBase(), dataTest.motDePasseEtudiantBase()))
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .content("idReponse=1"))
                 .andExpect(status().isAccepted());
@@ -374,7 +436,7 @@ class TpnoteApplicationTests {
 
         // Vote de l'étudiant
         mvc.perform(put(URI.create("/api/quizz/question/"+idRecupere+"/vote"))
-                        .with(httpBasic(TpnoteApplication.emailEtudiant,TpnoteApplication.motDePasseEtudiant))
+                        .with(httpBasic(dataTest.emailEtudiantBase(), dataTest.motDePasseEtudiantBase()))
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .content("idReponse=0"))
                 .andExpect(status().isConflict());
@@ -392,14 +454,17 @@ class TpnoteApplicationTests {
 
     @Test
     public void testVoter4() throws Exception {
-        Question question = new Question(0,"Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
+
+        creationCompteProfesseur();
+
+        Question question = new Question(0, dataTest.libelleQuestion(), dataTest.bonnesReponses());
         AtomicReference<String> identifiantQuestion = new AtomicReference<>("");
 
         ObjectMapper objectMapper= new ObjectMapper();
 
         // Création de la question par le professeur et récupération de l'identifiant de la question générée
         mvc.perform(post(URI.create("/api/quizz/question"))
-                        .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf))
+                        .with(httpBasic(dataTest.emailProfBase(), dataTest.motDePasseProfBase()))
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(question)))
                 .andExpect(status().isCreated())
@@ -413,7 +478,7 @@ class TpnoteApplicationTests {
 
         // Vote du professeur
         mvc.perform(put(URI.create("/api/quizz/question/"+idRecupere+"/vote"))
-                        .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf))
+                        .with(httpBasic(dataTest.emailProfBase(), dataTest.motDePasseProfBase()))
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .content("idReponse=1"))
                 .andExpect(status().isForbidden());
@@ -429,27 +494,29 @@ class TpnoteApplicationTests {
 
     @Test
     public void testGetQuestion1() throws Exception {
-        Question question = new Question(0,"Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
-        AtomicReference<String> identifiantQuestion = new AtomicReference<>("");
 
-        AtomicReference<Question> questionRecuperee=new AtomicReference<>(null);
+        creationCompteProfesseur();
+
+        Question question = new Question(0, dataTest.libelleQuestion(), dataTest.bonnesReponses());
+        AtomicReference<String> identifiantQuestion = new AtomicReference<>("");
+        AtomicReference<Question> questionRecuperee= new AtomicReference<>();
+
         ObjectMapper objectMapper= new ObjectMapper();
 
         // Création de la question par le professeur et récupération de l'identifiant de la question générée
         mvc.perform(post(URI.create("/api/quizz/question"))
-                        .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf))
+                        .with(httpBasic(dataTest.emailProfBase(), dataTest.motDePasseProfBase()))
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(question)))
                 .andExpect(status().isCreated())
                 .andDo((v) -> {
-                    String[] r = v.getResponse().getHeader("Location").split("/");
-                    identifiantQuestion.set(r[r.length-1]);
+                    identifiantQuestion.set(v.getResponse().getHeader("Location"));
                 });
+        String[] idDecompose = identifiantQuestion.get().split("/");
+        String idQuestion = idDecompose[idDecompose.length-1];
 
-
-        String idQuestion = identifiantQuestion.get();
         mvc.perform(get(URI.create("/api/quizz/question/"+ idQuestion))
-                .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf)).accept(MediaType.APPLICATION_JSON_VALUE))
+                .with(httpBasic(dataTest.emailProfBase(), dataTest.motDePasseProfBase())).accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andDo((x)->{questionRecuperee.set(objectMapper.readValue(x.getResponse().getContentAsString(), Question.class));});
 
@@ -469,27 +536,30 @@ class TpnoteApplicationTests {
      */
     @Test
     public void testGetQuestion2() throws Exception {
-        Question question = new Question(0,"Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
-        AtomicReference<String> identifiantQuestion = new AtomicReference<>("");
+        creationCompteProfesseur();
+        creationCompteEtudiant();
 
-        AtomicReference<Question> questionRecuperee=new AtomicReference<>(null);
+        Question question = new Question(0, dataTest.libelleQuestion(), dataTest.bonnesReponses());
+        AtomicReference<String> identifiantQuestion = new AtomicReference<>("");
+        AtomicReference<Question> questionRecuperee= new AtomicReference<>();
+
         ObjectMapper objectMapper= new ObjectMapper();
 
         // Création de la question par le professeur et récupération de l'identifiant de la question générée
         mvc.perform(post(URI.create("/api/quizz/question"))
-                        .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf))
+                        .with(httpBasic(dataTest.emailProfBase(), dataTest.motDePasseProfBase()))
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(question)))
                 .andExpect(status().isCreated())
                 .andDo((v) -> {
-                    String[] r = v.getResponse().getHeader("Location").split("/");
-                    identifiantQuestion.set(r[r.length-1]);
+                    identifiantQuestion.set(v.getResponse().getHeader("Location"));
                 });
+        String[] idDecompose = identifiantQuestion.get().split("/");
+        String idQuestion = idDecompose[idDecompose.length-1];
 
 
-        String idQuestion = identifiantQuestion.get();
         mvc.perform(get(URI.create("/api/quizz/question/"+ idQuestion))
-                        .with(httpBasic(TpnoteApplication.emailEtudiant,TpnoteApplication.motDePasseEtudiant)).accept(MediaType.APPLICATION_JSON_VALUE))
+                        .with(httpBasic(dataTest.emailEtudiantBase(), dataTest.motDePasseEtudiantBase())).accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andDo((x)->{questionRecuperee.set(objectMapper.readValue(x.getResponse().getContentAsString(), Question.class));});
 
@@ -512,10 +582,11 @@ class TpnoteApplicationTests {
     @Test
     public void testGetQuestion3() throws Exception {
 
+        creationCompteProfesseur();
 
-        String idQuestion = "identifiant%20bidon";
+        String idQuestion = dataTest.identifiantQuestionBidon();
         mvc.perform(get(URI.create("/api/quizz/question/"+ idQuestion))
-                        .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf))
+                        .with(httpBasic(dataTest.emailProfBase(), dataTest.motDePasseProfBase()))
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isNotFound());
 
@@ -530,14 +601,15 @@ class TpnoteApplicationTests {
     @Test
     public void testGetResultats1() throws Exception {
 
-        Question question = new Question(0,"Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
+        creationCompteProfesseur();
+        Question question = new Question(0, dataTest.libelleQuestion(), dataTest.bonnesReponses());
         AtomicReference<String> identifiantQuestion = new AtomicReference<>("");
 
         ObjectMapper objectMapper= new ObjectMapper();
 
         // Création de la question par le professeur et récupération de l'identifiant de la question générée
         mvc.perform(post(URI.create("/api/quizz/question"))
-                        .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf))
+                        .with(httpBasic(dataTest.emailProfBase(), dataTest.motDePasseProfBase()))
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(question)))
                 .andExpect(status().isCreated())
@@ -550,11 +622,11 @@ class TpnoteApplicationTests {
 
         mvc.perform(get(URI.create("/api/quizz/question/"+idRecupere+"/vote"))
                         .accept(MediaType.APPLICATION_JSON_VALUE)
-                        .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf))
+                        .with(httpBasic(dataTest.emailProfBase(), dataTest.motDePasseProfBase()))
                 )
                 .andExpect(status().isOk())
                 .andDo((x)->{
-                    Assertions.assertEquals(3,objectMapper.readValue(x.getResponse().getContentAsString(), ResultatVote[].class).length);
+                    Assertions.assertEquals(dataTest.bonnesReponses().length,objectMapper.readValue(x.getResponse().getContentAsString(), ResultatVote[].class).length);
                 });
 
     }
@@ -568,14 +640,17 @@ class TpnoteApplicationTests {
     @Test
     public void testGetResultats2() throws Exception {
 
-        Question question = new Question(0,"Quelle est la couleur du cheval blanc d'Henry IV ?","Blanc","Noir","Rouge");
+        creationCompteProfesseur();
+        creationCompteEtudiant();
+
+        Question question = new Question(0, dataTest.libelleQuestion(), dataTest.bonnesReponses());
         AtomicReference<String> identifiantQuestion = new AtomicReference<>("");
 
         ObjectMapper objectMapper= new ObjectMapper();
 
         // Création de la question par le professeur et récupération de l'identifiant de la question générée
         mvc.perform(post(URI.create("/api/quizz/question"))
-                        .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf))
+                        .with(httpBasic(dataTest.emailProfBase(), dataTest.motDePasseProfBase()))
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(question)))
                 .andExpect(status().isCreated())
@@ -588,7 +663,7 @@ class TpnoteApplicationTests {
 
         mvc.perform(get(URI.create("/api/quizz/question/"+idRecupere+"/vote"))
                         .accept(MediaType.APPLICATION_JSON_VALUE)
-                        .with(httpBasic(TpnoteApplication.emailEtudiant,TpnoteApplication.motDePasseEtudiant))
+                        .with(httpBasic(dataTest.emailEtudiantBase(), dataTest.motDePasseEtudiantBase()))
                 )
                 .andExpect(status().isForbidden());
 
@@ -597,22 +672,22 @@ class TpnoteApplicationTests {
     /**
      * Un prof tente de récupérer les résultats d'une question inexistante
      * Code attendu : 404
-     * Contenu attendu : un tableau avec les trois objets ResultatVote
      * @throws Exception
      */
     @Test
     public void testGetResultats3() throws Exception {
 
-        String idRecupere = "identifiant%20bidon";
+        creationCompteProfesseur();
+
+
+        String idRecupere = dataTest.identifiantQuestionBidon();
         mvc.perform(get(URI.create("/api/quizz/question/"+idRecupere+"/vote"))
                         .accept(MediaType.APPLICATION_JSON_VALUE)
-                        .with(httpBasic(TpnoteApplication.emailProf,TpnoteApplication.motDePasseProf))
+                        .with(httpBasic(dataTest.emailProfBase(), dataTest.motDePasseProfBase()))
                 )
                 .andExpect(status().isNotFound());
 
     }
-
-
 
 
 }
