@@ -1,8 +1,6 @@
 package fr.orleans.info.wsi.cc.tpnote;
 
-import org.springframework.stereotype.Component;
 
-@Component
 public interface DataTest {
     String emailProfBase();
 
