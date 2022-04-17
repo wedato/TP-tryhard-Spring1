@@ -153,6 +153,10 @@ public class FacadeQuizz {
 
     // on peut vraiment code à 3 ?!
     public ResultatVote[] getResultats(String idQuestion) throws QuestionInexistanteException {
-        return new ResultatVote[0];
+        return questions.stream()
+                .filter(question -> question.getIdQuestion().equals(idQuestion))
+                .findFirst()
+                .orElseThrow(QuestionInexistanteException::new)
+                .getResultats();
     }
 }
