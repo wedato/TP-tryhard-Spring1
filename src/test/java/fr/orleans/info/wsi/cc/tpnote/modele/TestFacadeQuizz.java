@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class TestFacadeQuizz {
+class TestFacadeQuizz {
 
     FacadeQuizz instance;
     DataTest data;
@@ -35,7 +35,7 @@ public class TestFacadeQuizz {
 
 
     @Test
-    public void testCreerUtilisateur1()  {
+    void testCreerUtilisateur1()  {
 
         String email = data.emailProfBase();
         String motDePasse = data.motDePasseProfBase();
@@ -51,7 +51,7 @@ public class TestFacadeQuizz {
      * Tentative de création d'un compte avec un mot de passe blank
      */
     @Test
-    public void testCreerUtilisateur2()  {
+    void testCreerUtilisateur2()  {
 
         String email = data.emailProfBase();
         String motDePasse = "     ";
@@ -64,7 +64,7 @@ public class TestFacadeQuizz {
      * Tentative de création d'un compte avec un mot de passe nul
      */
     @Test
-    public void testCreerUtilisateur3()  {
+    void testCreerUtilisateur3()  {
 
         String email = data.emailProfBase();
         String motDePasse = null;
@@ -78,7 +78,7 @@ public class TestFacadeQuizz {
      */
 
     @Test
-    public void testCreerUtilisateur4()  {
+    void testCreerUtilisateur4()  {
         String[]composante = data.emailProfBase().split("@");
         String email = composante[0]+composante[1];
         String motDePasse = data.motDePasseProfBase();
@@ -94,7 +94,7 @@ public class TestFacadeQuizz {
      */
 
     @Test
-    public void testCreerUtilisateur6() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException {
+    void testCreerUtilisateur6() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException {
 
         String email = data.emailProfBase();
         String motDePasse = data.motDePasseProfBase();
@@ -111,7 +111,7 @@ public class TestFacadeQuizz {
      * @throws EmailInexistantException
      */
     @Test
-    public void testGetIdUserByEmail1() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, EmailInexistantException {
+    void testGetIdUserByEmail1() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, EmailInexistantException {
         String email = data.emailProfBase();
         String motDePasse = data.motDePasseProfBase();
         Integer id = this.instance.creerUtilisateur(email,motDePasse);
@@ -128,7 +128,7 @@ public class TestFacadeQuizz {
      */
 
     @Test
-    public void testGetIdUserByEmail2() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, EmailInexistantException {
+    void testGetIdUserByEmail2() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, EmailInexistantException {
         String email = data.emailProfBase();
         String motDePasse = data.motDePasseProfBase();
         String email1= data.emailEtudiantBase();
@@ -146,7 +146,7 @@ public class TestFacadeQuizz {
      */
 
     @Test
-    public void testCreerQuestion1() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException {
+    void testCreerQuestion1() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException {
         String email = data.emailProfBase();
         String motDePasse = data.motDePasseProfBase();
         int id = this.instance.creerUtilisateur(email,motDePasse);
@@ -164,7 +164,7 @@ public class TestFacadeQuizz {
      */
 
     @Test
-    public void testCreerQuestion2() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException {
+    void testCreerQuestion2() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException {
         String email = data.emailProfBase();
         String motDePasse = data.motDePasseProfBase();
         int id = this.instance.creerUtilisateur(email,motDePasse);
@@ -181,7 +181,7 @@ public class TestFacadeQuizz {
      * @throws AuMoinsDeuxReponsesException
      */
     @Test
-    public void testCreerQuestion3() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException {
+    void testCreerQuestion3() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException {
         String email = data.emailProfBase();
         String motDePasse = data.motDePasseProfBase();
         int id = this.instance.creerUtilisateur(email,motDePasse);
@@ -200,7 +200,7 @@ public class TestFacadeQuizz {
      */
 
     @Test
-    public void testGetQuestionById1() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException, QuestionInexistanteException {
+    void testGetQuestionById1() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException, QuestionInexistanteException {
         String email = data.emailProfBase();
         String motDePasse = data.motDePasseProfBase();
         int id = this.instance.creerUtilisateur(email,motDePasse);
@@ -220,7 +220,7 @@ public class TestFacadeQuizz {
      */
 
     @Test
-    public void testGetQuestionById2() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException, QuestionInexistanteException {
+    void testGetQuestionById2() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException, QuestionInexistanteException {
         Assertions.assertThrows(QuestionInexistanteException.class,() ->this.instance.getQuestionById(data.identifiantQuestionBidon()));
     }
 
@@ -237,7 +237,7 @@ public class TestFacadeQuizz {
      * @throws ADejaVoteException
      */
     @Test
-    public void testVoterReponse1() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException, QuestionInexistanteException, NumeroPropositionInexistantException, ADejaVoteException {
+    void testVoterReponse1() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException, QuestionInexistanteException, NumeroPropositionInexistantException, ADejaVoteException {
         String email = data.emailProfBase();
         String motDePasse = data.motDePasseProfBase();
         int id = this.instance.creerUtilisateur(email,motDePasse);
@@ -261,7 +261,7 @@ public class TestFacadeQuizz {
      * @throws ADejaVoteException
      */
     @Test
-    public void testVoterReponse2() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException, QuestionInexistanteException, NumeroPropositionInexistantException, ADejaVoteException {
+    void testVoterReponse2() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException, QuestionInexistanteException, NumeroPropositionInexistantException, ADejaVoteException {
         String email = data.emailProfBase();
         String motDePasse = data.motDePasseProfBase();
         int id = this.instance.creerUtilisateur(email,motDePasse);
@@ -287,7 +287,7 @@ public class TestFacadeQuizz {
      * @throws ADejaVoteException
      */
     @Test
-    public void testVoterReponse3() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException, QuestionInexistanteException, NumeroPropositionInexistantException, ADejaVoteException {
+    void testVoterReponse3() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException, QuestionInexistanteException, NumeroPropositionInexistantException, ADejaVoteException {
         String email = data.emailProfBase();
         String motDePasse = data.motDePasseProfBase();
         int id = this.instance.creerUtilisateur(email,motDePasse);
@@ -311,7 +311,7 @@ public class TestFacadeQuizz {
      * @throws ADejaVoteException
      */
     @Test
-    public void testVoterReponse4() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException, QuestionInexistanteException, NumeroPropositionInexistantException, ADejaVoteException {
+    void testVoterReponse4() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException, QuestionInexistanteException, NumeroPropositionInexistantException, ADejaVoteException {
         String email = data.emailProfBase();
         String motDePasse = data.motDePasseProfBase();
         int id = this.instance.creerUtilisateur(email,motDePasse);
@@ -337,7 +337,7 @@ public class TestFacadeQuizz {
      */
 
     @Test
-    public void testVoterReponse5() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException, QuestionInexistanteException, NumeroPropositionInexistantException, ADejaVoteException {
+    void testVoterReponse5() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException, QuestionInexistanteException, NumeroPropositionInexistantException, ADejaVoteException {
         String email = data.emailProfBase();
         String motDePasse = data.motDePasseProfBase();
         this.instance.creerUtilisateur(email,motDePasse);
@@ -350,7 +350,7 @@ public class TestFacadeQuizz {
 
 
     @Test
-    public void testGetUtilisateurByEmail1() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, UtilisateurInexistantException {
+    void testGetUtilisateurByEmail1() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, UtilisateurInexistantException {
         String email = data.emailProfBase();
         String motDePasse = data.motDePasseProfBase();
         this.instance.creerUtilisateur(email,motDePasse);
@@ -358,7 +358,7 @@ public class TestFacadeQuizz {
     }
 
     @Test
-    public void testGetUtilisateurByEmail2() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, UtilisateurInexistantException {
+    void testGetUtilisateurByEmail2() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, UtilisateurInexistantException {
         String email = data.emailProfBase();
         Assertions.assertThrows(UtilisateurInexistantException.class,()->this.instance.getUtilisateurByEmail(email));
     }
@@ -366,7 +366,7 @@ public class TestFacadeQuizz {
 
 
     @Test
-    public void testReInit() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException {
+    void testReInit() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException {
         String email = data.emailProfBase();
         String motDePasse = data.motDePasseProfBase();
         int id = this.instance.creerUtilisateur(email,motDePasse);
@@ -380,7 +380,7 @@ public class TestFacadeQuizz {
 
 
     @Test
-    public void testGetResultatDunVote1() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException, QuestionInexistanteException, NumeroPropositionInexistantException, ADejaVoteException {
+    void testGetResultatDunVote1() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException, QuestionInexistanteException, NumeroPropositionInexistantException, ADejaVoteException {
         String email = data.emailProfBase();
         String motDePasse = data.motDePasseProfBase();
         int id = this.instance.creerUtilisateur(email,motDePasse);
@@ -397,7 +397,7 @@ public class TestFacadeQuizz {
 
 
     @Test
-    public void testGetResultatDunVote2() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException, QuestionInexistanteException, NumeroPropositionInexistantException, ADejaVoteException {
+    void testGetResultatDunVote2() throws MotDePasseObligatoireException, EmailNonValideException, EmailDejaUtiliseException, LibelleQuestionNonRenseigneException, AuMoinsDeuxReponsesException, QuestionInexistanteException, NumeroPropositionInexistantException, ADejaVoteException {
         String idQuestion = data.identifiantQuestionBidon();
 
         Assertions.assertThrows(QuestionInexistanteException.class,()->instance.getResultats(idQuestion));

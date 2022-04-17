@@ -3,9 +3,16 @@ package fr.orleans.info.wsi.cc.tpnote.modele;
 import fr.orleans.info.wsi.cc.tpnote.modele.exceptions.*;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class FacadeQuizz {
 
+    private List<Utilisateur> users = new ArrayList<>();
+    private List<Question> questions = new ArrayList<>();
 
     /**
      *
@@ -18,7 +25,20 @@ public class FacadeQuizz {
      */
 
     public int creerUtilisateur(String email,String password) throws EmailDejaUtiliseException, EmailNonValideException, MotDePasseObligatoireException {
-        return 0;
+        int id;
+
+        if (users.stream().anyMatch(user -> user.getEmailUtilisateur().equals(email))) {
+            throw new EmailDejaUtiliseException();
+        } else if (!OutilsPourValidationEmail.patternMatches(email)) {
+            throw new EmailNonValideException();
+        } else if (password == null || password.isBlank()) {
+            throw new MotDePasseObligatoireException();
+        } else {
+            Utilisateur utilisateur = new Utilisateur(email, password);
+            id = utilisateur.getIdUtilisateur();
+            users.add(utilisateur);
+        }
+        return id;
     }
 
     /**
@@ -28,7 +48,11 @@ public class FacadeQuizz {
      */
 
     public int getIdUserByEmail(String email) throws EmailInexistantException {
-        return 0;
+        return users.stream()
+                .filter(utilisateur -> utilisateur.getEmailUtilisateur().equals(email))
+                .findFirst()
+                .orElseThrow(EmailInexistantException::new)
+                .getIdUtilisateur();
     }
 
     /**
@@ -43,7 +67,18 @@ public class FacadeQuizz {
      */
 
     public String creerQuestion(int idUser, String libelleQuestion, String... libellesReponses) throws AuMoinsDeuxReponsesException, LibelleQuestionNonRenseigneException {
-        return null;
+        String q;
+
+        if (libellesReponses.length < 2) {
+            throw new AuMoinsDeuxReponsesException();
+        } else if (libelleQuestion.isBlank()) {
+            throw new LibelleQuestionNonRenseigneException();
+        } else {
+            Question question = new Question(idUser, libelleQuestion, libellesReponses);
+            q = question.getIdQuestion();
+            questions.add(question);
+        }
+        return q;
     }
 
 
@@ -55,7 +90,10 @@ public class FacadeQuizz {
      */
 
     public Question getQuestionById(String idQuestion) throws QuestionInexistanteException {
-        return null;
+        return questions.stream()
+                .filter(question -> question.getIdQuestion().equals(idQuestion))
+                .findFirst()
+                .orElseThrow(QuestionInexistanteException::new);
     }
 
     /**
@@ -73,7 +111,11 @@ public class FacadeQuizz {
 
     public void voterReponse(int idUser,String idQuestion, int numeroProposition) throws ADejaVoteException,
             NumeroPropositionInexistantException, QuestionInexistanteException {
-
+            questions.stream()
+                    .filter(question -> question.getIdQuestion().equals(idQuestion))
+                    .findAny()
+                    .orElseThrow(QuestionInexistanteException::new)
+                    .voterPourUneReponse(idUser, numeroProposition);
     }
 
 
@@ -83,7 +125,9 @@ public class FacadeQuizz {
      */
 
     public void reinitFacade(){
-    //TODO
+        Utilisateur.resetCompteur();
+        users.clear();
+        questions.clear();
     }
 
 
@@ -93,7 +137,10 @@ public class FacadeQuizz {
      * @return
      */
     public Utilisateur getUtilisateurByEmail(String username) throws UtilisateurInexistantException {
-        return null;
+        return users.stream()
+                .filter(utilisateur -> utilisateur.getEmailUtilisateur().contains(username))
+                .findFirst()
+                .orElseThrow(UtilisateurInexistantException::new);
     }
 
 

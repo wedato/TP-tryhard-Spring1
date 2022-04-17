@@ -11,7 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @SpringBootApplication
 public class TpnoteApplication {
 
-
     public static void main(String[] args) {
         SpringApplication.run(TpnoteApplication.class, args);
     }
