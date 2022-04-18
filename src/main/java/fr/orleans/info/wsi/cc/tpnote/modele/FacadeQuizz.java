@@ -155,4 +155,11 @@ public class FacadeQuizz {
     public ResultatVote[] getResultats(String idQuestion) throws QuestionInexistanteException {
         return getQuestionById(idQuestion).getResultats();
     }
+
+    /*public Utilisateur getUtilisateurById(int id) throws UtilisateurInexistantException {
+        return users.stream()
+                .filter(utilisateur -> utilisateur.getIdUtilisateur() == id)
+                .findFirst()
+                .orElseThrow(UtilisateurInexistantException::new);
+    }*/
 }
