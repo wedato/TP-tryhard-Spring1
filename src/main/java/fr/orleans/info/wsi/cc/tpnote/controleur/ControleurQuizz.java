@@ -122,7 +122,7 @@ public class ControleurQuizz {
         }
 
     }
-    
+
     /*
     PUT /api/quizz/question/{idQuestion}/vote
     - requête authentifiée uniquement disponible pour les étudiants (rôle ETUDIANT)
