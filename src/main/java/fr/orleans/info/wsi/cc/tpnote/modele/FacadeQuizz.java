@@ -111,11 +111,7 @@ public class FacadeQuizz {
 
     public void voterReponse(int idUser,String idQuestion, int numeroProposition) throws ADejaVoteException,
             NumeroPropositionInexistantException, QuestionInexistanteException {
-            questions.stream()
-                    .filter(question -> question.getIdQuestion().equals(idQuestion))
-                    .findAny()
-                    .orElseThrow(QuestionInexistanteException::new)
-                    .voterPourUneReponse(idUser, numeroProposition);
+        this.getQuestionById(idQuestion).voterPourUneReponse(idUser,numeroProposition);
     }
 
 
@@ -156,10 +152,10 @@ public class FacadeQuizz {
         return getQuestionById(idQuestion).getResultats();
     }
 
-    /*public Utilisateur getUtilisateurById(int id) throws UtilisateurInexistantException {
+    public Utilisateur getUtilisateurById(int id) throws UtilisateurInexistantException {
         return users.stream()
                 .filter(utilisateur -> utilisateur.getIdUtilisateur() == id)
                 .findFirst()
                 .orElseThrow(UtilisateurInexistantException::new);
-    }*/
+    }
 }
